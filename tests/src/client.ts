@@ -4,7 +4,7 @@ import * as Net from "net";
 const client = Net.createConnection({ port: 8124 }, () => {
     // 'connect' listener.
     console.log('connected to server!');
-    client.write('TCP packet from client!\r\n');
+    client.write('CLIENT: TCP packet from client!\r\n');
 });
 client.setEncoding('utf8');
 client.on('error', (err) => {
@@ -21,6 +21,12 @@ client.on('end', () => {
     console.log('disconnected from server');
 });
 
-setTimeout(function(){
-    client.end('Bye bye server');
-  },5000);
+// let x = 0;
+// setInterval(()=>{
+//     client.write('CLIENT: TCP packet '+ x +' from client!\r\n');
+//     x++
+// }, 1000);
+
+// setTimeout(function(){
+//     client.end('Bye bye server');
+//   },5000);

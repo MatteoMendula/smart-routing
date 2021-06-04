@@ -5,6 +5,12 @@
 
 import * as Net from "net";
 
+const client = Net.createConnection({ port: 8225 }, () => {
+    // 'connect' listener.
+    console.log('connected to server!');
+    // client.write('CLIENT: TCP packet from client!\r\n');
+});
+
 const server = Net.createServer();
 server.maxConnections = 10;
 server.on('close',function(){
@@ -17,7 +23,7 @@ server.on('connection',function(socket){
 
     console.log('---------server details -----------------');
   
-    const address = server.address();
+    const address : Net.AddressInfo = server.address() as Net.AddressInfo;
     const port = address.port;
     const family = address.family;
     const ipaddr = address.address;
@@ -74,12 +80,14 @@ server.on('connection',function(socket){
         console.log('Data sent to server : ' + data);
       
         //echo data
-        const is_kernel_buffer_full = socket.write('Data ::' + data);
+        const is_kernel_buffer_full = socket.write('SERVER: I have received - ' + data);
         if(is_kernel_buffer_full){
           console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
         }else{
           socket.pause();
         }
+
+        client.write("Forwarded data: "+data)
     });
     socket.on('drain',function(){
         console.log('write buffer is empty now .. u can resume the writable stream');
@@ -123,7 +131,7 @@ server.listen(
     port: 8124,
     exclusive: true
 },() => {
-    const address = server.address();
+    const address : Net.AddressInfo = server.address() as Net.AddressInfo;
     const port = address.port;
     const family = address.family;
     const ipaddr = address.address;

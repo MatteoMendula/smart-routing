@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Net = require("net");
 var client = Net.createConnection({ port: 8124 }, function () {
     console.log('connected to server!');
-    client.write('TCP packet from client!\r\n');
+    client.write('CLIENT: TCP packet from client!\r\n');
 });
 client.setEncoding('utf8');
 client.on('error', function (err) {
@@ -15,6 +15,4 @@ client.on('data', function (data) {
 client.on('end', function () {
     console.log('disconnected from server');
 });
-setTimeout(function () {
-    client.end('Bye bye server');
-}, 5000);
+//# sourceMappingURL=client.js.map

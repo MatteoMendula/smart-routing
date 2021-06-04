@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Net = require("net");
+var client = Net.createConnection({ port: 8225 }, function () {
+    console.log('connected to server!');
+});
 var server = Net.createServer();
 server.maxConnections = 10;
 server.on('close', function () {
@@ -47,13 +50,14 @@ server.on('connection', function (socket) {
         console.log('Bytes read : ' + bread);
         console.log('Bytes written : ' + bwrite);
         console.log('Data sent to server : ' + data);
-        var is_kernel_buffer_full = socket.write('Data ::' + data);
+        var is_kernel_buffer_full = socket.write('SERVER: I have received - ' + data);
         if (is_kernel_buffer_full) {
             console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
         }
         else {
             socket.pause();
         }
+        client.write("Forwarded data: " + data);
     });
     socket.on('drain', function () {
         console.log('write buffer is empty now .. u can resume the writable stream');
@@ -107,3 +111,4 @@ else {
 setTimeout(function () {
     server.close();
 }, 5000000);
+//# sourceMappingURL=serverForwarder.js.map
