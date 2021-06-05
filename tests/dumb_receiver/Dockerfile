@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 # If you are building your code for production
 # RUN npm ci --only=production
 
-COPY /start.sh /
+ADD /start.sh /
 RUN chmod +x /start.sh && /start.sh
 
 # Compile typescript files
