@@ -12,15 +12,16 @@ RUN npm install && npm install typescript -g
 # If you are building your code for production
 # RUN npm ci --only=production
 
+COPY /start.sh /
+RUN chmod +x /start.sh && /start.sh
+
 # Bundle app source
 COPY . .
-
-RUN chmod +x /start.sh && /start.sh
 
 # Compile typescript files
 RUN npm run build
 WORKDIR ./dist
 
-EXPOSE 8080
+# EXPOSE 8080
 # CMD node test3d.js
-CMD node test3d.js
+CMD node ping.js
