@@ -18,6 +18,10 @@ ADD /start.sh /
 # RUN chmod +x /start.sh && /start.sh
 CMD chmod +x /start.sh && /start.sh
 
+
+# Bundle app source
+COPY . .
+
 # Compile typescript files
 RUN npm run build
 WORKDIR ./dist
