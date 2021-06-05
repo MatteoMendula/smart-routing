@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [[ -z "${STATIC_IP}" ]]; then
     echo "Using default IP from Docker"
 else
