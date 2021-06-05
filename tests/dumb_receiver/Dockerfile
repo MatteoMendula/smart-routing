@@ -20,8 +20,8 @@ CMD chmod +x /start.sh && /start.sh
 
 # Compile typescript files
 # RUN npm run build
-# WORKDIR ./dist
+WORKDIR ./dist
 
 # EXPOSE 8080
 # CMD node test3d.js
-# CMD node ping.js
+CMD node app.js
