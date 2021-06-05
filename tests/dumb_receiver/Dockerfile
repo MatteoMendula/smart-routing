@@ -16,8 +16,8 @@ WORKDIR /usr/src/app
 
 ADD /start.sh /
 # RUN chmod +x /start.sh && /start.sh
-CMD chmod +x /start.sh && /start.sh
-
+# CMD chmod +x /start.sh && /start.sh
+RUN chmod +x /start.sh 
 ENTRYPOINT /start.sh
 
 
