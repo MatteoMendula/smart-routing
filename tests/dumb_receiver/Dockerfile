@@ -32,9 +32,12 @@
 # CMD node test3d.js
 # CMD node app.js
 
-FROM ubuntu
-RUN apt-get update \
-        && apt-get install -y net-tools iputils-ping
-COPY /start.sh /
-RUN chmod +x /start.sh 
-ENTRYPOINT /start.sh
+
+# ------------------------------
+
+# FROM ubuntu
+# RUN apt-get update \
+#         && apt-get install -y net-tools iputils-ping
+# COPY /start.sh /
+# RUN chmod +x /start.sh 
+# ENTRYPOINT /start.sh
