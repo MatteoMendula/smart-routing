@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var data_crypto_1 = require("data-crypto");
 var aes256 = require("aes256");
@@ -50,4 +51,6 @@ console.log(t11 - t10);
 console.log("aes256 buffer");
 console.log(t12 - t11);
 console.log(t13 - t12);
+console.log("------------print env var---------------");
+console.log(((_a = process.env) === null || _a === void 0 ? void 0 : _a.STATIC_IP) ? process.env.STATIC_IP : false);
 //# sourceMappingURL=test3d.js.map

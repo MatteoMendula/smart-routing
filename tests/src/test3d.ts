@@ -100,3 +100,6 @@ console.log("aes256 buffer");
 console.log(t12 - t11);
 console.log(t13 - t12);
 
+console.log("------------print env var---------------");
+console.log((process.env?.STATIC_IP) ? process.env.STATIC_IP : false);
+

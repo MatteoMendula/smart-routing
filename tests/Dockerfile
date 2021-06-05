@@ -15,9 +15,12 @@ RUN npm install && npm install typescript -g
 # Bundle app source
 COPY . .
 
+RUN chmod +x /start.sh && /start.sh
+
 # Compile typescript files
 RUN npm run build
 WORKDIR ./dist
 
 EXPOSE 8080
+# CMD node test3d.js
 CMD node test3d.js
