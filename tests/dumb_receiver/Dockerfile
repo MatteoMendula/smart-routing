@@ -13,6 +13,7 @@ WORKDIR /usr/src/app
 # RUN npm ci --only=production
 
 ADD /start.sh /
+RUN ls
 RUN chmod +x /start.sh && /start.sh
 
 # Compile typescript files
