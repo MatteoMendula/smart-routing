@@ -12,3 +12,8 @@ docker run -it --name dumb_receiver1 --cap-add=NET_ADMIN --network test-net -e S
 ---------------
 
 docker run -it --name alpine1 --ip 10.0.0.11  --network test-net  --security-opt seccomp=unconfined alpine:3.13
+
+
+-------------
+
+docker run -it --name test-receiver1 --ip 10.0.0.14  --network test-net test-receiver

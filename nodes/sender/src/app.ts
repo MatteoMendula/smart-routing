@@ -1,7 +1,7 @@
 
 import * as Net from "net";
 
-const client = Net.createConnection({ port: 8125, host: "10.0.0.14" }, () => {
+const client = Net.createConnection({ port: 8225, host: "10.0.0.14" }, () => {
     // 'connect' listener.
     console.log('connected to server!');
     client.write('CLIENT: TCP packet from client!\r\n');
