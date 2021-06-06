@@ -17,3 +17,8 @@ docker run -it --name alpine1 --ip 10.0.0.11  --network test-net  --security-opt
 -------------
 
 docker run -it --name test-receiver1 --ip 10.0.0.14  --network test-net test-receiver
+
+
+-------------
+
+docker run -it --name test-sender1 --network test-net test-sender
