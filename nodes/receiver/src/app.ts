@@ -69,8 +69,8 @@ server.on('error', (err) => {
 server.listen(
     {
     // host: (host?.docker?.internal) ? host?.docker?.internal :'localhost',
-    host: 'localhost',
-    // host: "10.0.0.14",
+    // host: 'localhost',
+    host: "10.0.0.14",
     port: 8225,
     exclusive: true
 },() => {
