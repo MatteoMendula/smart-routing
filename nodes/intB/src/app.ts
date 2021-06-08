@@ -4,22 +4,33 @@
 // performance: https://stackoverflow.com/questions/1235958/ipc-performance-named-pipe-vs-socket
 
 import * as Net from "net";
-import { Des, TripleDes } from "data-crypto";
+import { TripleDes } from "data-crypto";
 
 const DOCKER : boolean = false;
 
-const my_ip : string = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
-const port : number = 8225;
-const _secret : string = "depl0yit";
+const my_ip : string = (DOCKER) ? "10.0.0.13" : "192.168.1.113";
+const server_ip_r1 : string = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
+const my_port : number = 8225;
+const server_port_r1 : number = 8225;
 
+const client_r1 = Net.createConnection({ port: server_port_r1, host: server_ip_r1 }, () => {
+  // 'connect' listener.
+  console.log('connected to server ['+server_ip_r1+']!');
+});
+client_r1.setEncoding('utf8');
+client_r1.on('error', (err) => {
+  // Handle errors here.
+  throw err;
+});
 
-const received_pkts_buffer : Array<object> = [];
+client_r1.on('data', (data) => {
+  console.log(data.toString());
+  // client.end();
+});
 
-const createReport = () => {
-  for (var i in received_pkts_buffer){
-    console.log(received_pkts_buffer["seq_number"]);
-  }
-}
+client_r1.on('end', () => {
+  console.log('client_r1 disconnected from server');
+});
 
 const server = Net.createServer();
 server.maxConnections = 10;
@@ -40,22 +51,13 @@ server.on('connection',function(socket){
     });
 
     socket.on('data',function(data : string){
-        const bread = socket.bytesRead;
-        const bwrite = socket.bytesWritten;
-        // console.log('Bytes read : ' + bread);
-        // console.log('Bytes written : ' + bwrite);
+      const bread = socket.bytesRead;
+      const bwrite = socket.bytesWritten;
+      // console.log('Bytes read : ' + bread);
+      // console.log('Bytes written : ' + bwrite);
 
-        console.log('Data sent to server : ' + data);
-
-        if (data === "LAST_ONE"){
-          socket.end('Last packet');
-          socket.destroy();
-          createReport();
-        }else{
-          const packet_parsed = JSON.parse(data);
-          packet_parsed["timestamp_received"] = process.hrtime.bigint();
-          received_pkts_buffer.push(packet_parsed);
-        }
+      console.log('Data sent to server : ' + data);
+      client_r1.write(JSON.stringify(data));
     });
     socket.on('drain',function(){
         console.log('write buffer is empty now .. u can resume the writable stream');
@@ -98,7 +100,7 @@ server.listen(
     // host: (host?.docker?.internal) ? host?.docker?.internal :'localhost',
     // host: 'localhost',
     host: my_ip,
-    port: port,
+    port: my_port,
     exclusive: true
 },() => {
     const address : Net.AddressInfo = server.address() as Net.AddressInfo;

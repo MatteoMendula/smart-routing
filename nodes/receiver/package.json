@@ -11,6 +11,7 @@
   "author": "Matteo Mendula",
   "license": "ISC",
   "dependencies": {
+    "data-crypto": "^1.4.4",
     "net": "^1.0.2"
   },
   "devDependencies": {

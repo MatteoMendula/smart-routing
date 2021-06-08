@@ -8,7 +8,7 @@ docker run --name test1 --detach=true --rm --cap-add=NET_ADMIN --network=test -e
 
 docker run -it --name dumb_receiver1 --cap-add=NET_ADMIN --network test-net -e STATIC_IP=10.0.0.11 dumb_receiver
 
-
+docker network create --driver=overlay --attachable test-net
 ---------------
 
 docker run -it --name alpine1 --ip 10.0.0.11  --network test-net  --security-opt seccomp=unconfined alpine:3.13

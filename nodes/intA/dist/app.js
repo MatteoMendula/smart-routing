@@ -1,16 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Net = require("net");
+var data_crypto_1 = require("data-crypto");
 var DOCKER = false;
-var my_ip = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
+var my_ip = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
+var server_ip_r1 = (DOCKER) ? "10.0.0.13" : "192.168.1.113";
+var server_port_r1 = 8225;
 var port = 8225;
 var _secret = "depl0yit";
-var received_pkts_buffer = [];
-var createReport = function () {
-    for (var i in received_pkts_buffer) {
-        console.log(received_pkts_buffer["seq_number"]);
-    }
-};
+var client_r1 = Net.createConnection({ port: server_port_r1, host: server_ip_r1 }, function () {
+    console.log('connected to server [' + server_ip_r1 + ']!');
+});
+client_r1.setEncoding('utf8');
+client_r1.on('error', function (err) {
+    throw err;
+});
+client_r1.on('data', function (data) {
+    console.log(data.toString());
+});
+client_r1.on('end', function () {
+    console.log('client_r1 disconnected from server');
+});
 var server = Net.createServer();
 server.maxConnections = 10;
 server.on('close', function () {
@@ -25,16 +35,9 @@ server.on('connection', function (socket) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
         console.log('Data sent to server : ' + data);
-        if (data === "LAST_ONE") {
-            socket.end('Last packet');
-            socket.destroy();
-            createReport();
-        }
-        else {
-            var packet_parsed = JSON.parse(data);
-            packet_parsed["timestamp_received"] = process.hrtime.bigint();
-            received_pkts_buffer.push(packet_parsed);
-        }
+        var packet_parsed = JSON.parse(data);
+        packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
+        client_r1.write(JSON.stringify(packet_parsed));
     });
     socket.on('drain', function () {
         console.log('write buffer is empty now .. u can resume the writable stream');
