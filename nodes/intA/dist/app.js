@@ -34,10 +34,14 @@ server.on('connection', function (socket) {
     socket.on('data', function (data) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
-        console.log('Data sent to server : ' + data);
-        var packet_parsed = JSON.parse(data);
+        try {
+            var packet_parsed = JSON.parse(data);
         packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
         client_r1.write(JSON.stringify(packet_parsed));
+        } catch (error) {
+        console.log('Data sent to server : ' + data);
+            
+        }
     });
     socket.on('drain', function () {
         console.log('write buffer is empty now .. u can resume the writable stream');
