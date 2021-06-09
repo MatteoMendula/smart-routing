@@ -5,6 +5,7 @@
 
 import * as Net from "net";
 import { Des, TripleDes } from "data-crypto";
+import * as fs from "fs";
 
 const DOCKER : boolean = false;
 
@@ -16,8 +17,33 @@ const _secret : string = "depl0yit";
 const received_pkts_buffer : Array<object> = [];
 
 const createReport = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  const yyyy = today.getFullYear();
+  const hh = today.getHours();
+  const min = today.getMinutes();
+  const s = today.getSeconds();
+  const file_name = `${hh}_${min}_${s}_${dd}_${mm}_${yyyy}.csv`;
+  fs.appendFileSync(file_name, `seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency`);
+
   for (var i in received_pkts_buffer){
     console.log(received_pkts_buffer["seq_number"]);
+    const row = received_pkts_buffer[i];
+    const latency = Number(row[i]["timestamp_received"]) - Number(row[i]["timestamp_sent"])
+    fs.appendFile(file_name, 
+      `\n${row[i]["seq_number"]},
+          ${row[i]["content_encripted"]},
+          ${row[i]["high_security"]},
+          ${row[i]["n_forwards"]},
+          ${row[i]["destination"]},
+          ${row[i]["timestamp_sent"]},
+          ${row[i]["timestamp_received"]},
+          ${latency}`
+      , function (err) {
+        if (err) throw err;
+        console.log(`row${i} ok`);
+    });
   }
 }
 
