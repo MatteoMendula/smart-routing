@@ -68,13 +68,19 @@ var test = function (packet_limit) {
             destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
             pkt = generate_pkt(counter, destination["ip"], high_security);
             destination["client"].write(JSON.stringify(pkt));
-            Sleep.usleep(100000);
+            Sleep.usleep(1000);
             counter++;
             (counter <= packet_limit) && sendPackets();
             return [2];
         });
     }); };
-    sendPackets();
+    for (var i = 0; i < packet_limit; i++) {
+        var high_security = (getRandomInt(3) === 0) ? true : false;
+        var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
+        var pkt = generate_pkt(counter, destination["ip"], high_security);
+        destination["client"].write(JSON.stringify(pkt));
+        Sleep.usleep(1000);
+    }
     Sleep.usleep(1000);
     client_r1.write("LAST_ONE");
     client_r1.end();
