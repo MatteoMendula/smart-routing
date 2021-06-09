@@ -39,39 +39,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Net = require("net");
 var data_crypto_1 = require("data-crypto");
 var Sleep = require("sleep");
+var DOCKER = false;
 var getRandomInt = function (max) {
     return Math.floor(Math.random() * max);
 };
-var server_ip_r1 = "10.0.0.14";
-var server_ip_r2 = "10.0.0.12";
+var server_ip_r1 = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
+var server_ip_r2 = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
 var server_port_r1 = 8225;
 var server_port_r2 = 8225;
 var _secret = "depl0yit";
-var packet_limit = 300;
-var generate_pkt = function (seq_number, destination_ip) {
+var generate_pkt = function (seq_number, destination_ip, high_security) {
     var content = Math.random().toString(36).substring(2);
     var pkt = {};
     pkt["destination"] = destination_ip;
     pkt["n_forwards"] = (destination_ip === server_ip_r1) ? 1 : 3;
     pkt["seq_number"] = seq_number;
-    pkt["content_encripted"] = (destination_ip === server_ip_r1) ? data_crypto_1.TripleDes.encrypt(content, _secret) : data_crypto_1.Des.encrypt(content, _secret);
-    pkt["timestamp"] = process.hrtime.bigint();
+    pkt["content_encripted"] = (destination_ip === server_ip_r1) ? content : data_crypto_1.Des.encrypt(content, _secret);
+    pkt["timestamp_sent"] = process.hrtime.bigint();
+    pkt["high_security"] = high_security;
+    return pkt;
 };
-var test1 = function () {
+var test = function (packet_limit) {
     var counter = 0;
-    var sendPacket = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var sendPackets = function () { return __awaiter(void 0, void 0, void 0, function () {
         var high_security, destination, pkt;
         return __generator(this, function (_a) {
             high_security = (getRandomInt(3) === 0) ? true : false;
             destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
-            pkt = generate_pkt(counter, destination["ip"]);
+            pkt = generate_pkt(counter, destination["ip"], high_security);
             destination["client"].write(JSON.stringify(pkt));
             Sleep.usleep(1000);
             counter++;
-            (counter <= packet_limit) && sendPacket();
+            (counter <= packet_limit) && sendPackets();
             return [2];
         });
     }); };
+    sendPackets();
+    Sleep.usleep(1000);
+    client_r1.write("LAST_ONE");
+    client_r1.end();
+    client_r2.end();
 };
 var client_r1 = Net.createConnection({ port: server_port_r1, host: server_ip_r1 }, function () {
     console.log('connected to server [' + server_ip_r1 + ']!');
@@ -84,7 +91,7 @@ client_r1.on('data', function (data) {
     console.log(data.toString());
 });
 client_r1.on('end', function () {
-    console.log('disconnected from server');
+    console.log('client_r1 disconnected from server');
 });
 var client_r2 = Net.createConnection({ port: server_port_r2, host: server_ip_r2 }, function () {
     console.log('connected to server [' + server_ip_r2 + ']!');
@@ -97,7 +104,7 @@ client_r2.on('data', function (data) {
     console.log(data.toString());
 });
 client_r2.on('end', function () {
-    console.log('disconnected from server');
+    console.log('client_r1 disconnected from server');
 });
-test1();
+test(300);
 //# sourceMappingURL=app.js.map

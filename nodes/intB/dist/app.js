@@ -1,13 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Net = require("net");
-var data_crypto_1 = require("data-crypto");
 var DOCKER = false;
-var my_ip = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
-var server_ip_r1 = (DOCKER) ? "10.0.0.13" : "192.168.1.113";
+var my_ip = (DOCKER) ? "10.0.0.13" : "192.168.1.113";
+var server_ip_r1 = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
 var my_port = 8225;
 var server_port_r1 = 8225;
-var _secret = "depl0yit";
 var client_r1 = Net.createConnection({ port: server_port_r1, host: server_ip_r1 }, function () {
     console.log('connected to server [' + server_ip_r1 + ']!');
 });
@@ -35,9 +33,7 @@ server.on('connection', function (socket) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
         console.log('Data sent to server : ' + data);
-        var packet_parsed = JSON.parse(data);
-        packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
-        client_r1.write(JSON.stringify(packet_parsed));
+        client_r1.write(JSON.stringify(data));
     });
     socket.on('drain', function () {
         console.log('write buffer is empty now .. u can resume the writable stream');
