@@ -79,7 +79,7 @@ server.on('connection',function(socket){
           createReport();
         }else{
           const packet_parsed = JSON.parse(data);
-          packet_parsed["timestamp_received"] = process.hrtime.bigint();
+          packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
           received_pkts_buffer.push(packet_parsed);
         }
     });
