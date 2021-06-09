@@ -35,7 +35,7 @@ const test = (packet_limit) => {
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
         const pkt = generate_pkt(counter, destination["ip"], high_security);
         destination["client"].write(JSON.stringify(pkt));
-        Sleep.usleep(1000); //microseconds = 10e-3 milliseconds
+        Sleep.usleep(100000); //microseconds = 10e-3 milliseconds
         counter++;
         (counter <= packet_limit) && sendPackets();
     }
