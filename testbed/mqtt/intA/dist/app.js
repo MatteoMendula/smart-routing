@@ -37,10 +37,11 @@ server.on('connection', function (stream) {
         console.log("--------------------------------------------------");
         console.log("received", packet);
         console.log("received payload", JSON.parse(packet.payload.toString()));
-        var pkt_as_string = packet.payload.toString;
+        var pkt_as_string = packet.payload.toString();
         var packet_parsed = JSON.parse(pkt_as_string);
         packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
         client_r1.publish(topic_name, Buffer.from(JSON.stringify(packet_parsed)));
+        console.log("pkt done");
     });
     client.on('pingreq', function () {
         client.pingresp();
