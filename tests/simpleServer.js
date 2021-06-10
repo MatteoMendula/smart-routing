@@ -3,22 +3,32 @@
 // ref here: https://gist.github.com/sid24rane/2b10b8f4b2f814bd0851d861d3515a10
 // performance: https://stackoverflow.com/questions/1235958/ipc-performance-named-pipe-vs-socket
 
-import * as Net from "net";
+// import * as Net from "net";
+
+const Net = require("net");
 // import { AddressInfo, createServer } from 'net'
+
+// const server = Net.createServer(function(socket) {
+//     socket.once('connect', socket.setNoDelay) // correct?
+//     // const timeServer = time();
+// })
 
 const server = Net.createServer();
 server.maxConnections = 10;
 server.on('close',function(){
     console.log('Server closed !');
-  });
+});
+
+
 
 server.on('connection',function(socket){
 
     console.log('Buffer size : ' + socket.bufferSize);
+    socket.setNoDelay(true);
 
     console.log('---------server details -----------------');
   
-    const address : Net.AddressInfo = server.address() as Net.AddressInfo;
+    const address = server.address();
     const port = address.port;
     const family = address.family;
     const ipaddr = address.address;
@@ -79,7 +89,7 @@ server.on('connection',function(socket){
         if(is_kernel_buffer_full){
           console.log('Data was flushed successfully from kernel buffer i.e written successfully!');
         }else{
-          socket.pause();
+            socket.pause();
         }
     });
     socket.on('drain',function(){
@@ -124,7 +134,8 @@ server.listen(
     port: 8124,
     exclusive: true
 },() => {
-    const address : Net.AddressInfo = server.address() as Net.AddressInfo;
+    const address = server.address();
+
     const port = address.port;
     const family = address.family;
     const ipaddr = address.address;
