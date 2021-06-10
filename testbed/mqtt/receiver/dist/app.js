@@ -20,7 +20,6 @@ var createReport = function () {
     fs.appendFileSync(file_name, "seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency");
     for (var i in received_pkts_buffer) {
         var row = received_pkts_buffer[i];
-        console.log(row);
         var latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"]);
         fs.appendFile(file_name, "\n" + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency, function (err) {
             if (err)
@@ -42,6 +41,7 @@ server.on('connection', function (stream) {
         if (counter_pkt >= 3000) {
             console.log("received payload end of dialog mex: ", pkt_as_string);
             server.close();
+            client.destroy();
             createReport();
         }
         else {

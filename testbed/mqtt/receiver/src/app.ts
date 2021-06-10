@@ -30,7 +30,7 @@ const createReport = () => {
 
   for (var i in received_pkts_buffer){
     const row = received_pkts_buffer[i];
-    console.log(row);
+    // console.log(row);
 
     const latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"])
     fs.appendFile(file_name, 
@@ -68,6 +68,7 @@ server.on('connection', function (stream) {
     if (counter_pkt >= 3000){
       console.log("received payload end of dialog mex: ", pkt_as_string)
       server.close();
+      client.destroy();
       createReport();
     }else{
       let packet_parsed : any = false;
