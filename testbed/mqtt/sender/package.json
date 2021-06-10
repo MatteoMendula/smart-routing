@@ -1,5 +1,5 @@
 {
-  "name": "smart_routing_middleware",
+  "name": "smart_routing_middleware_sender",
   "version": "1.0.0",
   "description": "smart routing middlware for ai enhanced forwarding",
   "main": "index.js",
