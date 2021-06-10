@@ -44,7 +44,7 @@ const createReport = () => {
 
 const server = new Net.Server();
 
-
+let counter_pkt = 0;
 server.on('connection', function (stream) {
   var client = mqttConnection(stream);
 
@@ -59,12 +59,13 @@ server.on('connection', function (stream) {
     // send a puback with messageId (for QoS > 0)
     // client.puback({ messageId: packet.messageId })
     console.log("--------------------------------------------------")
-    console.log("received", packet)
+    // console.log("received", packet)
     // console.log("received payload", packet.payload.toString())
 
     const pkt_as_string : string = packet.payload.toString();
 
-    if (pkt_as_string === "_END_OF_DIALOG_"){
+    // if (pkt_as_string === "_END_OF_DIALOG_"){
+    if (counter_pkt >= 300){
       console.log("received payload end of dialog mex: ", pkt_as_string)
       server.close();
       createReport();
@@ -74,6 +75,7 @@ server.on('connection', function (stream) {
       const packet_parsed : object = JSON.parse(pkt_as_string);
       packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
       received_pkts_buffer.push(packet_parsed);
+      counter_pkt++;
     }
     console.log("done pkt")
 })

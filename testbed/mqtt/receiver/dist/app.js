@@ -29,8 +29,8 @@ var createReport = function () {
         });
     }
 };
-const server = new Net.Server();
-let counter_pkts = 0;
+var server = new Net.Server();
+var counter_pkt = 0;
 server.on('connection', function (stream) {
     var client = mqttConnection(stream);
     client.on('connect', function (packet) {
@@ -38,20 +38,18 @@ server.on('connection', function (stream) {
     });
     client.on('publish', function (packet) {
         console.log("--------------------------------------------------");
-        // console.log("received", packet);
         var pkt_as_string = packet.payload.toString();
-        if (pkt_as_string === "_END_OF_DIALOG_") {
+        if (counter_pkt >= 300) {
             console.log("received payload end of dialog mex: ", pkt_as_string);
             server.close();
             createReport();
         }
         else {
-            // console.log("received payload", JSON.parse(pkt_as_string));
-            console.log("received pkt", counter_pkts);
+            console.log("received payload", JSON.parse(pkt_as_string));
             var packet_parsed = JSON.parse(pkt_as_string);
             packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
             received_pkts_buffer.push(packet_parsed);
-            counter_pkts++;
+            counter_pkt++;
         }
         console.log("done pkt");
     });

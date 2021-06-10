@@ -39,7 +39,7 @@ var test = function (packet_limit) {
             destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
             Sleep.usleep(1000);
         }
-        Sleep.sleep(10);
+        Sleep.sleep(1);
         client_r1.publish(topic_name, "_END_OF_DIALOG_");
         client_r1.end();
         client_r2.end();
