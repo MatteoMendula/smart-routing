@@ -5,7 +5,7 @@ var mqttConnection = require("mqtt-connection");
 var fs = require("fs");
 var DOCKER = false;
 var my_ip = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
-var port = 1883;
+var my_port = 1883;
 var _secret = "depl0yit";
 var received_pkts_buffer = [];
 var createReport = function () {
@@ -39,7 +39,7 @@ server.on('connection', function (stream) {
         console.log("--------------------------------------------------");
         console.log("received", packet);
         console.log("received payload", JSON.parse(packet.payload.toString()));
-        var pkt_as_string = packet.payload.toString;
+        var pkt_as_string = packet.payload.toString();
         if (pkt_as_string === "_END_OF_DIALOG_") {
             server.close();
             createReport();
@@ -62,5 +62,5 @@ server.on('connection', function (stream) {
     client.on('disconnect', function () { client.destroy(); });
     stream.on('timeout', function () { client.destroy(); });
 });
-server.listen(1883, function () { console.log("listening"); });
+server.listen(my_port, function () { console.log("listening"); });
 //# sourceMappingURL=app.js.map

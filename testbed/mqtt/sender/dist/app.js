@@ -15,6 +15,8 @@ var server_port_r2 = 1883;
 var my_clientId = "sender_" + my_ip;
 var _secret = "depl0yit";
 var topic_name = "smart_routing_01";
+var lock1 = false;
+var lock2 = false;
 var generate_pkt = function (seq_number, destination_ip, high_security) {
     var content = Math.random().toString(36).substring(2);
     var pkt = {};
@@ -27,17 +29,24 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
     return pkt;
 };
 var test = function (packet_limit) {
-    for (var i = 0; i < packet_limit; i++) {
-        var high_security = (getRandomInt(3) === 0) ? true : false;
-        var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
-        var pkt = generate_pkt(i, destination["ip"], high_security);
-        destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
+    if (lock1 && lock2) {
+        console.log("ok sending");
+        for (var i = 0; i < packet_limit; i++) {
+            console.log(i);
+            var high_security = (getRandomInt(3) === 0) ? true : false;
+            var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
+            var pkt = generate_pkt(i, destination["ip"], high_security);
+            destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
+            Sleep.usleep(1000);
+        }
         Sleep.usleep(1000);
+        client_r1.publish(topic_name, "_END_OF_DIALOG_");
+        client_r1.end();
+        client_r2.end();
     }
-    Sleep.usleep(1000);
-    client_r1.publish(topic_name, "_END_OF_DIALOG_");
-    client_r1.end();
-    client_r2.end();
+    else {
+        console.log("bad");
+    }
 };
 var client_r1_connection_options = {
     port: server_port_r1,
@@ -47,6 +56,8 @@ var client_r1 = mqttClient.connect("mqtt://" + server_ip_r1, client_r1_connectio
 client_r1.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
         if (!err) {
+            lock1 = true;
+            test(300);
             console.log("client_r1 successfully subscribed");
         }
     });
@@ -62,6 +73,8 @@ var client_r2 = mqttClient.connect("mqtt://" + server_ip_r2, client_r2_connectio
 client_r2.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
         if (!err) {
+            lock2 = true;
+            test(300);
             console.log("client_r2 successfully subscribed");
         }
     });
@@ -69,6 +82,4 @@ client_r2.on('connect', function () {
 client_r2.on('message', function (topic, message) {
     console.log(message.toString());
 });
-Sleep.usleep(1000 * 1000);
-test(300);
 //# sourceMappingURL=app.js.map

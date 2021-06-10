@@ -69,7 +69,7 @@ server.on('connection', function (stream) {
     // console.log("received payload", packet.payload.toString())
     console.log("received payload", JSON.parse(packet.payload.toString()))
 
-    const pkt_as_string : string = packet.payload.toString;
+    const pkt_as_string : string = packet.payload.toString();
 
     if (pkt_as_string === "_END_OF_DIALOG_"){
       server.close();

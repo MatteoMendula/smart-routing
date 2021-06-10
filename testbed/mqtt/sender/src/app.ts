@@ -17,6 +17,9 @@ const my_clientId : string = `sender_${my_ip}`;
 const _secret : string = "depl0yit";
 const topic_name : string = "smart_routing_01";
 
+let lock1 : boolean = false;
+let lock2 : boolean = false;
+
 const generate_pkt = (seq_number : number, destination_ip : string, high_security: boolean) => {
     const content = Math.random().toString(36).substring(2);
     const pkt : object = {};
@@ -31,19 +34,26 @@ const generate_pkt = (seq_number : number, destination_ip : string, high_securit
 
 const test = (packet_limit) => {
 
-    for (var i = 0; i < packet_limit; i++){
+    if (lock1 && lock2){
+      console.log("ok sending")
+      for (var i = 0; i < packet_limit; i++){
+        console.log(i)
         const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
         const pkt = generate_pkt(i, destination["ip"], high_security);
         destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
         Sleep.usleep(1000); //microseconds = 10e-3 milliseconds
-    }
+        // Sleep.msleep(10); 
+      }
 
-    // sendPackets();
-    Sleep.usleep(1000);
-    client_r1.publish(topic_name, "_END_OF_DIALOG_")
-    client_r1.end();
-    client_r2.end();
+      // sendPackets();
+      Sleep.usleep(1000);
+      client_r1.publish(topic_name, "_END_OF_DIALOG_")
+      client_r1.end();
+      client_r2.end();
+    }else{
+      console.log("bad")
+    }
 }
 
 const client_r1_connection_options = {
@@ -55,6 +65,8 @@ const client_r1 = mqttClient.connect(`mqtt://${server_ip_r1}`,client_r1_connecti
 client_r1.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
     if (!err) {
+      lock1 = true;
+      test(300)
       console.log("client_r1 successfully subscribed");
     }
   })
@@ -75,7 +87,9 @@ const client_r2 = mqttClient.connect(`mqtt://${server_ip_r2}`,client_r2_connecti
 client_r2.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
     if (!err) {
-        console.log("client_r2 successfully subscribed");
+      lock2 = true;
+      test(300)
+      console.log("client_r2 successfully subscribed");
     }
   })
 });
@@ -87,5 +101,5 @@ client_r2.on('message', function (topic, message) {
 });
 
 
-Sleep.usleep(1000 * 1000);
-test(300);
+// Sleep.usleep(1000);
+// test(300);

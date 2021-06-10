@@ -61,7 +61,7 @@ server.on('connection', function (stream) {
     // console.log("received payload", packet.payload.toString())
     console.log("received payload", JSON.parse(packet.payload.toString()))
 
-    const pkt_as_string : string = packet.payload.toString;
+    const pkt_as_string : string = packet.payload.toString();
     const packet_parsed : object = JSON.parse(pkt_as_string);
     packet_parsed["content_encripted"] =  TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
     client_r1.publish(topic_name, Buffer.from(JSON.stringify(packet_parsed)));   
