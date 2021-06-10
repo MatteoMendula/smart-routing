@@ -38,15 +38,25 @@ const test = (packet_limit) => {
 
     if (lock1 && lock2){
       console.log("ok sending")
-      for (var i = 0; i < packet_limit; i++){
-        console.log(i)
+      // for (var i = 0; i < packet_limit; i++){
+      //   console.log(i)
+      //   const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
+      //   const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
+      //   const pkt = generate_pkt(i, destination["ip"], high_security);
+      //   destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
+      //   Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
+      //   // Sleep.msleep(10); 
+      // }
+      let counter = 0;
+      const interval = setInterval(()=>{
+        console.log(counter)
         const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
-        const pkt = generate_pkt(i, destination["ip"], high_security);
+        const pkt = generate_pkt(counter, destination["ip"], high_security);
         destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
-        Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
-        // Sleep.msleep(10); 
-      }
+        counter++;
+        if (counter === packet_limit) clearInterval(interval);
+      },100);
 
       // sendPackets();
       Sleep.sleep(1);

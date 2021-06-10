@@ -31,14 +31,17 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
 var test = function (packet_limit) {
     if (lock1 && lock2) {
         console.log("ok sending");
-        for (var i = 0; i < packet_limit; i++) {
-            console.log(i);
+        var counter_1 = 0;
+        var interval_1 = setInterval(function () {
+            console.log(counter_1);
             var high_security = (getRandomInt(3) === 0) ? true : false;
             var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
-            var pkt = generate_pkt(i, destination["ip"], high_security);
+            var pkt = generate_pkt(counter_1, destination["ip"], high_security);
             destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
-            Sleep.usleep(1000 * 100);
-        }
+            counter_1++;
+            if (counter_1 === packet_limit)
+                clearInterval(interval_1);
+        }, 100);
         Sleep.sleep(1);
         client_r1.publish(topic_name, "_END_OF_DIALOG_");
         client_r1.end();
