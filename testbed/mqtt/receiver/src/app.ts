@@ -65,7 +65,7 @@ server.on('connection', function (stream) {
     const pkt_as_string : string = packet.payload.toString();
 
     // if (pkt_as_string === "_END_OF_DIALOG_"){
-    if (counter_pkt >= 3000){
+    if (counter_pkt >= 10){
       console.log("received payload end of dialog mex: ", pkt_as_string)
       server.close();
       client.destroy();
