@@ -45,11 +45,17 @@ server.on('connection', function (stream) {
             createReport();
         }
         else {
-            console.log("received payload", JSON.parse(pkt_as_string));
-            var packet_parsed = JSON.parse(pkt_as_string);
-            packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
-            received_pkts_buffer.push(packet_parsed);
-            counter_pkt++;
+            var packet_parsed = false;
+            try {
+                packet_parsed = JSON.parse(pkt_as_string);
+            }
+            catch (error) { }
+            if (packet_parsed) {
+                console.log("received payload", JSON.parse(pkt_as_string));
+                packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
+                received_pkts_buffer.push(packet_parsed);
+                counter_pkt++;
+            }
         }
         console.log("done pkt");
     });

@@ -70,12 +70,16 @@ server.on('connection', function (stream) {
       server.close();
       createReport();
     }else{
-      console.log("received payload", JSON.parse(pkt_as_string))
-
-      const packet_parsed : object = JSON.parse(pkt_as_string);
-      packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
-      received_pkts_buffer.push(packet_parsed);
-      counter_pkt++;
+      let packet_parsed : any = false;
+      try {
+        packet_parsed = JSON.parse(pkt_as_string);
+      } catch (error) {}
+      if (packet_parsed){
+        console.log("received payload", JSON.parse(pkt_as_string))
+        packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
+        received_pkts_buffer.push(packet_parsed);
+        counter_pkt++;
+      }
     }
     console.log("done pkt")
 })
