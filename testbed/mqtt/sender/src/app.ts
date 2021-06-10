@@ -28,7 +28,8 @@ const generate_pkt = (seq_number : number, destination_ip : string, high_securit
     pkt["n_forwards"] = (destination_ip === server_ip_r1) ? 1 : 3; //can be handles by traversing nodes
     pkt["seq_number"] = seq_number;
     pkt["content_encripted"] =  (destination_ip === server_ip_r1) ? content : Des.encrypt(content, _secret);
-    pkt["timestamp_sent"] = Number(process.hrtime.bigint());
+    // pkt["timestamp_sent"] = Number(process.hrtime.bigint());
+    pkt["timestamp_sent"] = Date.now();
     pkt["high_security"] = high_security;
     return pkt;
 }

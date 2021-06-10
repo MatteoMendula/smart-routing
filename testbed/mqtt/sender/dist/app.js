@@ -24,7 +24,7 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
     pkt["n_forwards"] = (destination_ip === server_ip_r1) ? 1 : 3;
     pkt["seq_number"] = seq_number;
     pkt["content_encripted"] = (destination_ip === server_ip_r1) ? content : data_crypto_1.Des.encrypt(content, _secret);
-    pkt["timestamp_sent"] = Number(process.hrtime.bigint());
+    pkt["timestamp_sent"] = Date.now();
     pkt["high_security"] = high_security;
     return pkt;
 };

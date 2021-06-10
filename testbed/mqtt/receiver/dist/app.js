@@ -53,7 +53,7 @@ server.on('connection', function (stream) {
             catch (error) { }
             if (packet_parsed) {
                 console.log("received payload", counter_pkt);
-                packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
+                packet_parsed["timestamp_received"] = Date.now();
                 received_pkts_buffer.push(packet_parsed);
             }
         }
