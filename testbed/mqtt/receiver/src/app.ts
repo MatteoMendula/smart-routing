@@ -34,14 +34,7 @@ const createReport = () => {
 
     const latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"])
     fs.appendFile(file_name, 
-      `\n${row["seq_number"]},
-          ${row["content_encripted"]},
-          ${row["high_security"]},
-          ${row["n_forwards"]},
-          ${row["destination"]},
-          ${row["timestamp_sent"]},
-          ${row["timestamp_received"]},
-          ${latency}`
+      `\n${row["seq_number"]},${row["content_encripted"]},${row["high_security"]},${row["n_forwards"]},${row["destination"]},${row["timestamp_sent"]},${row["timestamp_received"]},${latency}`
       , function (err) {
         if (err) throw err;
         console.log(`row${i} ok`);
