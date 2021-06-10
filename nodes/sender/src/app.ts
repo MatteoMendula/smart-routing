@@ -34,7 +34,7 @@ const test = (packet_limit) => {
         const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
         const pkt = generate_pkt(counter, destination["ip"], high_security);
-        destination["client"].write(JSON.stringify(pkt)+"_EOP_");
+        destination["client"].write(JSON.stringify(pkt));
         Sleep.usleep(1000); //microseconds = 10e-3 milliseconds
         counter++;
         (counter <= packet_limit) && sendPackets();
@@ -44,13 +44,13 @@ const test = (packet_limit) => {
         const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
         const pkt = generate_pkt(counter, destination["ip"], high_security);
-        destination["client"].write(JSON.stringify(pkt));
+        destination["client"].write(JSON.stringify(pkt)+"_EOP_");
         Sleep.usleep(1000); //microseconds = 10e-3 milliseconds
     }
 
     // sendPackets();
     Sleep.usleep(1000);
-    client_r1.write("LAST_ONE");
+    client_r1.write("_EOS_");
     client_r1.end();
     client_r2.end();
 }
