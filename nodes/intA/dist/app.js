@@ -34,13 +34,12 @@ server.on('connection', function (socket) {
     socket.on('data', function (data) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
-        try {
-            var packet_parsed = JSON.parse(data);
-        packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
-        client_r1.write(JSON.stringify(packet_parsed));
-        } catch (error) {
         console.log('Data sent to server : ' + data);
-            
+        var data_arr = data.split("_");
+        for (var i in data_arr) {
+            var packet_parsed = JSON.parse(data_arr[i].trim());
+            packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
+            client_r1.write(JSON.stringify(packet_parsed) + "_");
         }
     });
     socket.on('drain', function () {
