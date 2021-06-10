@@ -42,7 +42,13 @@ server.on('connection', function (socket) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
         console.log('Data sent to server : ' + data);
-        if (data === "LAST_ONE") {
+        if (data.includes("_EOS_")) {
+            var data_arr = data.split("_EOS_")[0].split("_EOP_");
+            for (var i in data_arr) {
+                var packet_parsed = JSON.parse(data_arr[i].trim());
+                packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
+                received_pkts_buffer.push(packet_parsed);
+            }
             socket.end('Last packet');
             socket.destroy();
             createReport();

@@ -67,7 +67,7 @@ var test = function (packet_limit) {
             high_security = (getRandomInt(3) === 0) ? true : false;
             destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
             pkt = generate_pkt(counter, destination["ip"], high_security);
-            destination["client"].write(JSON.stringify(pkt) + "_EOP_");
+            destination["client"].write(JSON.stringify(pkt));
             Sleep.usleep(1000);
             counter++;
             (counter <= packet_limit) && sendPackets();
@@ -78,11 +78,11 @@ var test = function (packet_limit) {
         var high_security = (getRandomInt(3) === 0) ? true : false;
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
         var pkt = generate_pkt(counter, destination["ip"], high_security);
-        destination["client"].write(JSON.stringify(pkt));
+        destination["client"].write(JSON.stringify(pkt) + "_EOP_");
         Sleep.usleep(1000);
     }
     Sleep.usleep(1000);
-    client_r1.write("LAST_ONE");
+    client_r1.write("_EOS_");
     client_r1.end();
     client_r2.end();
 };
