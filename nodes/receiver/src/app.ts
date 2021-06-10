@@ -78,9 +78,12 @@ server.on('connection',function(socket){
           socket.destroy();
           createReport();
         }else{
-          const packet_parsed = JSON.parse(data);
-          packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
-          received_pkts_buffer.push(packet_parsed);
+          const data_arr = data.split("_");
+          for (var i in data_arr){
+            const packet_parsed = JSON.parse(data_arr[i].trim());
+            packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
+            received_pkts_buffer.push(packet_parsed);
+          }
         }
     });
     socket.on('drain',function(){

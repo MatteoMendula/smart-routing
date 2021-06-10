@@ -58,10 +58,17 @@ server.on('connection',function(socket){
       // console.log('Bytes written : ' + bwrite);
 
       console.log('Data sent to server : ' + data);
-      const packet_parsed = JSON.parse(data);
-      packet_parsed["content_encripted"] =  TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
-      client_r1.write(JSON.stringify(packet_parsed));
+
+
+      const data_arr = data.split("_");
+      for (var i in data_arr){
+        const packet_parsed = JSON.parse(data_arr[i].trim());
+        packet_parsed["content_encripted"] =  TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
+        client_r1.write(JSON.stringify(packet_parsed)+"_");
+      }
     });
+
+
     socket.on('drain',function(){
         console.log('write buffer is empty now .. u can resume the writable stream');
         socket.resume();
