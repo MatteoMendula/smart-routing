@@ -36,7 +36,7 @@ server.on('connection', function (stream) {
         console.log("--------------------------------------------------");
         console.log("received", packet);
         console.log("received payload", JSON.parse(packet.payload.toString()));
-        var pkt_as_string = packet.payload.toString;
+        var pkt_as_string = packet.payload.toString();
         client_r1.publish(topic_name, Buffer.from(pkt_as_string));
     });
     client.on('pingreq', function () {

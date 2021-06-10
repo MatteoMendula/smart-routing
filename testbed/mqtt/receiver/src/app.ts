@@ -29,8 +29,9 @@ const createReport = () => {
   fs.appendFileSync(file_name, `seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency`);
 
   for (var i in received_pkts_buffer){
-    console.log(received_pkts_buffer["seq_number"]);
     const row = received_pkts_buffer[i];
+    console.log(row);
+
     const latency = Number(row[i]["timestamp_received"]) - Number(row[i]["timestamp_sent"])
     fs.appendFile(file_name, 
       `\n${row[i]["seq_number"]},

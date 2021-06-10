@@ -59,7 +59,7 @@ server.on('connection', function (stream) {
     // console.log("received payload", packet.payload.toString())
     console.log("received payload", JSON.parse(packet.payload.toString()))
 
-    const pkt_as_string : string = packet.payload.toString;
+    const pkt_as_string : string = packet.payload.toString();
     client_r1.publish(topic_name, Buffer.from(pkt_as_string));   
   })
 

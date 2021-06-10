@@ -19,8 +19,8 @@ var createReport = function () {
     var file_name = hh + "_" + min + "_" + s + "_" + dd + "_" + mm + "_" + yyyy + ".csv";
     fs.appendFileSync(file_name, "seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency");
     for (var i in received_pkts_buffer) {
-        console.log(received_pkts_buffer["seq_number"]);
         var row = received_pkts_buffer[i];
+        console.log(row);
         var latency = Number(row[i]["timestamp_received"]) - Number(row[i]["timestamp_sent"]);
         fs.appendFile(file_name, "\n" + row[i]["seq_number"] + ",\n          " + row[i]["content_encripted"] + ",\n          " + row[i]["high_security"] + ",\n          " + row[i]["n_forwards"] + ",\n          " + row[i]["destination"] + ",\n          " + row[i]["timestamp_sent"] + ",\n          " + row[i]["timestamp_received"] + ",\n          " + latency, function (err) {
             if (err)
