@@ -39,7 +39,7 @@ server.on('connection', function (stream) {
     client.on('publish', function (packet) {
         console.log("--------------------------------------------------");
         var pkt_as_string = packet.payload.toString();
-        if (counter_pkt >= 300) {
+        if (counter_pkt >= 3000) {
             console.log("received payload end of dialog mex: ", pkt_as_string);
             server.close();
             createReport();

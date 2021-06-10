@@ -66,7 +66,7 @@ client_r1.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
     if (!err) {
       lock1 = true;
-      test(300)
+      test(3000)
       console.log("client_r1 successfully subscribed");
     }
   })
