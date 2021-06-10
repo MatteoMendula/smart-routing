@@ -22,7 +22,7 @@ var createReport = function () {
         var row = received_pkts_buffer[i];
         console.log(row);
         var latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"]);
-        fs.appendFile(file_name, "\n" + row["seq_number"] + ",\n          " + row["content_encripted"] + ",\n          " + row["high_security"] + ",\n          " + row["n_forwards"] + ",\n          " + row["destination"] + ",\n          " + row["timestamp_sent"] + ",\n          " + row["timestamp_received"] + ",\n          " + latency, function (err) {
+        fs.appendFile(file_name, "\n" + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency, function (err) {
             if (err)
                 throw err;
             console.log("row" + i + " ok");
