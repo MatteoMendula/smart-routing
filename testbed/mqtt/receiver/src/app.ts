@@ -67,18 +67,21 @@ server.on('connection', function (stream) {
     console.log("--------------------------------------------------")
     console.log("received", packet)
     // console.log("received payload", packet.payload.toString())
-    console.log("received payload", JSON.parse(packet.payload.toString()))
 
     const pkt_as_string : string = packet.payload.toString();
 
     if (pkt_as_string === "_END_OF_DIALOG_"){
+      console.log("received payload end of dialog mex: ", pkt_as_string)
       server.close();
       createReport();
     }else{
+      console.log("received payload", JSON.parse(pkt_as_string))
+
       const packet_parsed : object = JSON.parse(pkt_as_string);
       packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
       received_pkts_buffer.push(packet_parsed);
     }
+    console.log("done pkt")
 })
 
   // client pinged

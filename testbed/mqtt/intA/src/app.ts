@@ -65,6 +65,7 @@ server.on('connection', function (stream) {
     const packet_parsed : object = JSON.parse(pkt_as_string);
     packet_parsed["content_encripted"] =  TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
     client_r1.publish(topic_name, Buffer.from(JSON.stringify(packet_parsed)));   
+    console.log("pkt done")
   })
 
   // client pinged
