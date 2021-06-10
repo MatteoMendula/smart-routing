@@ -32,15 +32,15 @@ const createReport = () => {
     const row = received_pkts_buffer[i];
     console.log(row);
 
-    const latency = Number(row[i]["timestamp_received"]) - Number(row[i]["timestamp_sent"])
+    const latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"])
     fs.appendFile(file_name, 
-      `\n${row[i]["seq_number"]},
-          ${row[i]["content_encripted"]},
-          ${row[i]["high_security"]},
-          ${row[i]["n_forwards"]},
-          ${row[i]["destination"]},
-          ${row[i]["timestamp_sent"]},
-          ${row[i]["timestamp_received"]},
+      `\n${row["seq_number"]},
+          ${row["content_encripted"]},
+          ${row["high_security"]},
+          ${row["n_forwards"]},
+          ${row["destination"]},
+          ${row["timestamp_sent"]},
+          ${row["timestamp_received"]},
           ${latency}`
       , function (err) {
         if (err) throw err;
