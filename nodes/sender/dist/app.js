@@ -67,7 +67,7 @@ var test = function (packet_limit) {
             high_security = (getRandomInt(3) === 0) ? true : false;
             destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
             pkt = generate_pkt(counter, destination["ip"], high_security);
-            destination["client"].write(JSON.stringify(pkt) + "_");
+            destination["client"].write(JSON.stringify(pkt) + "_EOP_");
             Sleep.usleep(1000);
             counter++;
             (counter <= packet_limit) && sendPackets();

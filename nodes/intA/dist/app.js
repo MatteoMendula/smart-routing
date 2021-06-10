@@ -35,11 +35,11 @@ server.on('connection', function (socket) {
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
         console.log('Data sent to server : ' + data);
-        var data_arr = data.split("_");
+        var data_arr = data.split("_EOP_");
         for (var i in data_arr) {
             var packet_parsed = JSON.parse(data_arr[i].trim());
             packet_parsed["content_encripted"] = data_crypto_1.TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
-            client_r1.write(JSON.stringify(packet_parsed) + "_");
+            client_r1.write(JSON.stringify(packet_parsed) + "_EOP_");
         }
     });
     socket.on('drain', function () {

@@ -48,7 +48,7 @@ server.on('connection', function (socket) {
             createReport();
         }
         else {
-            var data_arr = data.split("_");
+            var data_arr = data.split("_EOP_");
             for (var i in data_arr) {
                 var packet_parsed = JSON.parse(data_arr[i].trim());
                 packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());

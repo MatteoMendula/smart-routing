@@ -60,11 +60,11 @@ server.on('connection',function(socket){
       console.log('Data sent to server : ' + data);
 
 
-      const data_arr = data.split("_");
+      const data_arr = data.split("_EOP_");
       for (var i in data_arr){
         const packet_parsed = JSON.parse(data_arr[i].trim());
         packet_parsed["content_encripted"] =  TripleDes.encrypt(packet_parsed["content_encripted"], _secret);
-        client_r1.write(JSON.stringify(packet_parsed)+"_");
+        client_r1.write(JSON.stringify(packet_parsed)+"_EOP_");
       }
     });
 
