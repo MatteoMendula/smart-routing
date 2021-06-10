@@ -44,7 +44,7 @@ const test = (packet_limit) => {
         const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2} : {ip: server_ip_r1, client: client_r1}; 
         const pkt = generate_pkt(i, destination["ip"], high_security);
         destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
-        Sleep.usleep(1000); //microseconds = 10e-3 milliseconds
+        Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
         // Sleep.msleep(10); 
       }
 

@@ -37,7 +37,7 @@ var test = function (packet_limit) {
             var destination = (high_security) ? { ip: server_ip_r2, client: client_r2 } : { ip: server_ip_r1, client: client_r1 };
             var pkt = generate_pkt(i, destination["ip"], high_security);
             destination["client"].publish(topic_name, Buffer.from(JSON.stringify(pkt)));
-            Sleep.usleep(1000);
+            Sleep.usleep(1000 * 100);
         }
         Sleep.sleep(1);
         client_r1.publish(topic_name, "_END_OF_DIALOG_");
