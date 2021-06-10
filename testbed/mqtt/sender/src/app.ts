@@ -67,7 +67,7 @@ client_r1.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
     if (!err) {
       lock1 = true;
-      test(10)
+      test(1000)
       console.log("client_r1 successfully subscribed");
     }
   })
@@ -89,7 +89,7 @@ client_r2.on('connect', function () {
     client_r1.subscribe(topic_name, function (err) {
     if (!err) {
       lock2 = true;
-      test(10)
+      test(1000)
       console.log("client_r2 successfully subscribed");
     }
   })
