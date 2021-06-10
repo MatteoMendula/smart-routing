@@ -47,7 +47,7 @@ const test = (packet_limit) => {
       }
 
       // sendPackets();
-      Sleep.sleep(5);
+      Sleep.sleep(10);
       client_r1.publish(topic_name, "_END_OF_DIALOG_")
       client_r1.end();
       client_r2.end();
