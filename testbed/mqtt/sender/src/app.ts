@@ -8,6 +8,7 @@ const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
+
 const my_ip = (DOCKER) ? "10.0.0.11" : "192.168.1.111";
 const server_ip_r1 : string = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
 const server_ip_r2 : string = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
