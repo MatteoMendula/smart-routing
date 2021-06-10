@@ -71,14 +71,14 @@ server.on('connection', function (stream) {
       createReport();
     }else{
       let packet_parsed : any = false;
+      counter_pkt++;
       try {
         packet_parsed = JSON.parse(pkt_as_string);
       } catch (error) {}
       if (packet_parsed){
-        console.log("received payload", JSON.parse(pkt_as_string))
+        console.log("received payload", counter_pkt)
         packet_parsed["timestamp_received"] = Number(process.hrtime.bigint());
         received_pkts_buffer.push(packet_parsed);
-        counter_pkt++;
       }
     }
     console.log("done pkt")
