@@ -15,7 +15,7 @@ var server_ip_r2 = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
 var server_port_r1 = 41234;
 var server_port_r2 = 41234;
 var _secret = "depl0yit";
-var generate_pkt = function (seq_number, destination_ip, high_security) {
+var generate_pkt = function (seq_number, destination_ip, high_security, current_pkt_frequency) {
     var content = Math.random().toString(36).substring(2);
     var pkt = {};
     pkt["destination"] = destination_ip;
@@ -24,6 +24,7 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
     pkt["content_encripted"] = (destination_ip === server_ip_r1) ? content : data_crypto_1.Des.encrypt(content, _secret);
     pkt["timestamp_sent"] = Date.now();
     pkt["high_security"] = high_security;
+    pkt["current_pkt_frequency"] = current_pkt_frequency;
     return pkt;
 };
 var test = function (packet_limit) {
@@ -35,21 +36,28 @@ var test = function (packet_limit) {
     var first_send_time_pkt_per_sec = 100;
     var second_send_time_pkt_per_sec = 450;
     var third_send_time_pkt_per_sec = 1000;
+    var current_pkt_frequency = first_send_time_pkt_per_sec;
     var sendPacktsFunction = function () {
         console.log(counter);
         var high_security = (getRandomInt(3) === 0) ? true : false;
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2, port: server_port_r2 } : { ip: server_ip_r1, client: client_r1, port: server_port_r1 };
-        var pkt = generate_pkt(counter, destination["ip"], high_security);
+        var pkt = generate_pkt(counter, destination["ip"], high_security, current_pkt_frequency);
         var pkt_as_string = JSON.stringify(pkt);
         destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], function (err) {
         });
         counter++;
-        if (counter < first_send_pkts)
-            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec));
-        else if (counter < second_send_pkts)
-            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(second_send_time_pkt_per_sec));
-        else if (counter < third_send_pkts)
-            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(third_send_time_pkt_per_sec));
+        if (counter < first_send_pkts) {
+            current_pkt_frequency = first_send_time_pkt_per_sec;
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(current_pkt_frequency));
+        }
+        else if (counter < second_send_pkts) {
+            current_pkt_frequency = second_send_time_pkt_per_sec;
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(current_pkt_frequency));
+        }
+        else if (counter < third_send_pkts) {
+            current_pkt_frequency = third_send_time_pkt_per_sec;
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(current_pkt_frequency));
+        }
         else
             setTimeout(function () {
                 console.log("sending _END_OF_DIALOG_");
