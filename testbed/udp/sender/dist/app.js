@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var dgram = require("dgram");
 var data_crypto_1 = require("data-crypto");
-var Sleep = require("sleep");
 var DOCKER = false;
 var getRandomInt = function (max) {
     return Math.floor(Math.random() * max);
@@ -51,18 +50,20 @@ var test = function (packet_limit) {
             setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(second_send_time_pkt_per_sec));
         else if (counter < third_send_pkts)
             setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(third_send_time_pkt_per_sec));
-        else {
-            Sleep.sleep(1);
-            client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
-            });
-            client_r1.close();
-            client_r2.close();
-        }
-        ;
+        else
+            setTimeout(function () {
+                console.log("sending _END_OF_DIALOG_");
+                client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
+                });
+                setTimeout(function () {
+                    client_r1.close();
+                    client_r2.close();
+                }, 2000);
+            }, 2000);
     };
     setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec));
 };
 var client_r1 = dgram.createSocket('udp4');
 var client_r2 = dgram.createSocket('udp4');
-test(100);
+test(1000);
 //# sourceMappingURL=app.js.map

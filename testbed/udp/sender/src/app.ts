@@ -84,15 +84,19 @@ const test = (packet_limit) => {
     if (counter < first_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec))
     else if (counter < second_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(second_send_time_pkt_per_sec))
     else if (counter < third_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(third_send_time_pkt_per_sec))
-    else {
-      Sleep.sleep(1);
+    else setTimeout(()=>{
+      console.log("sending _END_OF_DIALOG_")
+      // Sleep.sleep(1);
       client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
         // console.log(err)
         // client.close();
       });
-      client_r1.close()
-      client_r2.close()
-    };
+      // Sleep.sleep(1);
+      setTimeout(()=>{
+        client_r1.close()
+        client_r2.close()
+      }, 2000);
+    }, 2000);
   }
   
 
@@ -120,4 +124,4 @@ const client_r1 = dgram.createSocket('udp4');
 const client_r2 = dgram.createSocket('udp4');
 
 
-test(100);
+test(1000);

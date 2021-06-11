@@ -4,7 +4,7 @@ var dgram = require("dgram");
 var fs = require("fs");
 var DOCKER = false;
 var my_ip = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
-var my_port = 1883;
+var my_port = 41234;
 var _secret = "depl0yit";
 var received_pkts_buffer = [];
 var createReport = function () {
@@ -16,11 +16,11 @@ var createReport = function () {
     var min = today.getMinutes();
     var s = today.getSeconds();
     var file_name = hh + "_" + min + "_" + s + "_" + dd + "_" + mm + "_" + yyyy + ".csv";
-    fs.appendFileSync(file_name, "seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency");
+    fs.appendFileSync(file_name, "index,seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency");
     for (var i in received_pkts_buffer) {
         var row = received_pkts_buffer[i];
         var latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"]);
-        fs.appendFile(file_name, "\n" + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency, function (err) {
+        fs.appendFile(file_name, "\n" + i + "," + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency, function (err) {
             if (err)
                 throw err;
             console.log("row" + i + " ok");
@@ -60,5 +60,5 @@ server.on('listening', function () {
     var address = server.address();
     console.log("server listening " + address.address + ":" + address.port);
 });
-server.bind(41234);
+server.bind(my_port);
 //# sourceMappingURL=app.js.map
