@@ -74,8 +74,8 @@ const test = (packet_limit) => {
 
   const sendPacktsFunction = ()=> {
     let high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
-    (counter > first_send_pkts) &&  (high_security = (getRandomInt(10) === 0) ? true : false);
-    (counter > second_send_pkts) &&  (high_security = false);
+    // (counter > first_send_pkts) &&  (high_security = (getRandomInt(10) === 0) ? true : false);
+    (counter > second_send_pkts + 1000) &&  (high_security = false);
      
     high_security && console.log(counter, high_security)
     !high_security && console.log(counter)
