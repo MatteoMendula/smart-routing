@@ -26,16 +26,19 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
 };
 var test = function (packet_limit) {
     console.log("ok sending");
-    for (var i = 0; i < packet_limit; i++) {
-        console.log(i);
+    var counter = 0;
+    var interval = setInterval(function () {
+        console.log(counter);
         var high_security = (getRandomInt(3) === 0) ? true : false;
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2, port: server_port_r2 } : { ip: server_ip_r1, client: client_r1, port: server_port_r1 };
-        var pkt = generate_pkt(i, destination["ip"], high_security);
+        var pkt = generate_pkt(counter, destination["ip"], high_security);
         var pkt_as_string = JSON.stringify(pkt);
         destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], function (err) {
         });
-        Sleep.usleep(1000 * 100);
-    }
+        counter++;
+        if (counter === packet_limit)
+            clearInterval(interval);
+    }, 100);
     Sleep.sleep(1);
     client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
     });

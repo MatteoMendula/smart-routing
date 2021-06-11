@@ -32,19 +32,33 @@ const generate_pkt = (seq_number : number, destination_ip : string, high_securit
 const test = (packet_limit) => {
 
   console.log("ok sending")
-  for (var i = 0; i < packet_limit; i++){
-    console.log(i)
+  // for (var i = 0; i < packet_limit; i++){
+  //   console.log(i)
+  //   const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
+  //   const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
+  //   const pkt = generate_pkt(i, destination["ip"], high_security);
+  //   const pkt_as_string = JSON.stringify(pkt);
+  //   destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], (err) => {
+  //     // console.log(err)
+  //     // client.close();
+  //   });
+  //   Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
+  //   // Sleep.msleep(10); 
+  // }
+  let counter = 0;
+  const interval = setInterval(()=>{
+    console.log(counter)
     const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
     const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
-    const pkt = generate_pkt(i, destination["ip"], high_security);
+    const pkt = generate_pkt(counter, destination["ip"], high_security);
     const pkt_as_string = JSON.stringify(pkt);
     destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], (err) => {
       // console.log(err)
       // client.close();
     });
-    Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
-    // Sleep.msleep(10); 
-  }
+    counter++;
+    if (counter === packet_limit) clearInterval(interval);
+  },100);
   // sendPackets();
   Sleep.sleep(1);
   client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
