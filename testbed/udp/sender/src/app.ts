@@ -67,7 +67,7 @@ const test = (packet_limit) => {
 
   const first_send_time_pkt_per_sec = 100;
   const second_send_time_pkt_per_sec = 450;
-  const third_send_time_pkt_per_sec = 900;
+  const third_send_time_pkt_per_sec = 1000;
 
   const sendPacktsFunction = ()=> {
     console.log(counter)
