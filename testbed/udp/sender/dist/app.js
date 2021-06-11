@@ -33,8 +33,8 @@ var test = function (packet_limit) {
     var second_send_pkts = Math.ceil(packet_limit / 3 * 2);
     var third_send_pkts = packet_limit;
     var first_send_time_pkt_per_sec = 100;
-    var second_send_time_pkt_per_sec = 300;
-    var third_send_time_pkt_per_sec = 800;
+    var second_send_time_pkt_per_sec = 350;
+    var third_send_time_pkt_per_sec = 600;
     var sendPacktsFunction = function () {
         console.log(counter);
         var high_security = (getRandomInt(3) === 0) ? true : false;
