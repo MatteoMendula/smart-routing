@@ -7,6 +7,9 @@ var DOCKER = false;
 var getRandomInt = function (max) {
     return Math.floor(Math.random() * max);
 };
+var parsePktPerSecondsToWaitingTime_millis = function (packets_per_seconds) {
+    return Math.ceil(1000 / packets_per_seconds);
+};
 var my_ip = (DOCKER) ? "10.0.0.11" : "192.168.1.111";
 var server_ip_r1 = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
 var server_ip_r2 = (DOCKER) ? "10.0.0.12" : "192.168.1.112";
@@ -27,7 +30,13 @@ var generate_pkt = function (seq_number, destination_ip, high_security) {
 var test = function (packet_limit) {
     console.log("ok sending");
     var counter = 0;
-    var interval = setInterval(function () {
+    var first_send_pkts = Math.ceil(packet_limit / 3);
+    var second_send_pkts = Math.ceil(packet_limit / 3 * 2);
+    var third_send_pkts = packet_limit;
+    var first_send_time_pkt_per_sec = 10;
+    var second_send_time_pkt_per_sec = 100;
+    var third_send_time_pkt_per_sec = 1000;
+    var sendPacktsFunction = function () {
         console.log(counter);
         var high_security = (getRandomInt(3) === 0) ? true : false;
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2, port: server_port_r2 } : { ip: server_ip_r1, client: client_r1, port: server_port_r1 };
@@ -36,13 +45,22 @@ var test = function (packet_limit) {
         destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], function (err) {
         });
         counter++;
-        if (counter === packet_limit) {
+        if (counter < first_send_pkts)
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec));
+        else if (counter < second_send_pkts)
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(second_send_time_pkt_per_sec));
+        else if (counter < third_send_pkts)
+            setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(third_send_time_pkt_per_sec));
+        else {
             Sleep.sleep(1);
             client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
             });
-            clearInterval(interval);
+            client_r1.close();
+            client_r2.close();
         }
-    }, 100);
+        ;
+    };
+    setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec));
 };
 var client_r1 = dgram.createSocket('udp4');
 var client_r2 = dgram.createSocket('udp4');

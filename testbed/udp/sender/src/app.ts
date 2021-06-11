@@ -8,6 +8,10 @@ const getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 }
 
+const parsePktPerSecondsToWaitingTime_millis = (packets_per_seconds) => {
+  return Math.ceil(1000 / packets_per_seconds);
+}
+
 
 const my_ip = (DOCKER) ? "10.0.0.11" : "192.168.1.111";
 const server_ip_r1 : string = (DOCKER) ? "10.0.0.14" : "192.168.1.114";
@@ -31,7 +35,7 @@ const generate_pkt = (seq_number : number, destination_ip : string, high_securit
 
 const test = (packet_limit) => {
 
-  console.log("ok sending")
+  console.log("ok sending");
   // for (var i = 0; i < packet_limit; i++){
   //   console.log(i)
   //   const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
@@ -45,8 +49,27 @@ const test = (packet_limit) => {
   //   Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
   //   // Sleep.msleep(10); 
   // }
+
+  // Sleep.sleep(1);
+  // client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
+  //   // console.log(err)
+  //   // client.close();
+  // });
+  // client_r1.close()
+  // client_r2.close()
+
+
   let counter = 0;
-  const interval = setInterval(()=>{
+
+  const first_send_pkts = Math.ceil(packet_limit / 3);
+  const second_send_pkts = Math.ceil(packet_limit / 3 * 2);
+  const third_send_pkts = packet_limit;
+
+  const first_send_time_pkt_per_sec = 10;
+  const second_send_time_pkt_per_sec = 100;
+  const third_send_time_pkt_per_sec = 1000;
+
+  const sendPacktsFunction = ()=> {
     console.log(counter)
     const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
     const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
@@ -57,19 +80,44 @@ const test = (packet_limit) => {
       // client.close();
     });
     counter++;
-    if (counter === packet_limit){
+
+    if (counter < first_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec))
+    else if (counter < second_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(second_send_time_pkt_per_sec))
+    else if (counter < third_send_pkts) setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(third_send_time_pkt_per_sec))
+    else {
       Sleep.sleep(1);
       client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
         // console.log(err)
         // client.close();
       });
-      clearInterval(interval);
-    } 
-  },100);
+      client_r1.close()
+      client_r2.close()
+    };
+  }
+  
+
+  setTimeout(sendPacktsFunction, parsePktPerSecondsToWaitingTime_millis(first_send_time_pkt_per_sec));
+
+  // const interval_1 = setInterval(()=>{
+  //   console.log(counter)
+  //   const high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
+  //   const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
+  //   const pkt = generate_pkt(counter, destination["ip"], high_security);
+  //   const pkt_as_string = JSON.stringify(pkt);
+  //   destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], (err) => {
+  //     // console.log(err)
+  //     // client.close();
+  //   });
+  //   counter++;
+  //   if (counter === first_send){
+  //     clearInterval(interval_1);
+  //   } 
+  // },100);
+
 }
 
 const client_r1 = dgram.createSocket('udp4');
 const client_r2 = dgram.createSocket('udp4');
 
 
-test(100)
+test(100);
