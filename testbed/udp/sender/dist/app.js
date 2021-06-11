@@ -32,8 +32,8 @@ var test = function (packet_limit) {
     var first_send_pkts = Math.ceil(packet_limit / 3);
     var second_send_pkts = Math.ceil(packet_limit / 3 * 2);
     var third_send_pkts = packet_limit;
-    var first_send_time_pkt_per_sec = 10;
-    var second_send_time_pkt_per_sec = 100;
+    var first_send_time_pkt_per_sec = 100;
+    var second_send_time_pkt_per_sec = 500;
     var third_send_time_pkt_per_sec = 1000;
     var sendPacktsFunction = function () {
         console.log(counter);
@@ -65,5 +65,5 @@ var test = function (packet_limit) {
 };
 var client_r1 = dgram.createSocket('udp4');
 var client_r2 = dgram.createSocket('udp4');
-test(1000);
+test(10000);
 //# sourceMappingURL=app.js.map
