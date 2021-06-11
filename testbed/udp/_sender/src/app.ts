@@ -74,11 +74,12 @@ const test = (packet_limit) => {
 
   const sendPacktsFunction = ()=> {
     let high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
-    if (counter > first_send_pkts){
-      high_security = (getRandomInt(10) === 0) ? true : false;
-    }
+    (counter > first_send_pkts) &&  (high_security = (getRandomInt(10) === 0) ? true : false);
+    (counter > second_send_time_pkt_per_sec) &&  (high_security = (getRandomInt(30) === 0) ? true : false);
+     
     high_security && console.log(counter, high_security)
     !high_security && console.log(counter)
+    
     const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
     const pkt = generate_pkt(counter, destination["ip"], high_security, current_pkt_frequency);
     const pkt_as_string = JSON.stringify(pkt);

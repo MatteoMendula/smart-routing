@@ -39,9 +39,8 @@ var test = function (packet_limit) {
     var current_pkt_frequency = first_send_time_pkt_per_sec;
     var sendPacktsFunction = function () {
         var high_security = (getRandomInt(3) === 0) ? true : false;
-        if (counter > first_send_pkts) {
-            high_security = (getRandomInt(10) === 0) ? true : false;
-        }
+        (counter > first_send_pkts) && (high_security = (getRandomInt(10) === 0) ? true : false);
+        (counter > second_send_time_pkt_per_sec) && (high_security = (getRandomInt(30) === 0) ? true : false);
         high_security && console.log(counter, high_security);
         !high_security && console.log(counter);
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2, port: server_port_r2 } : { ip: server_ip_r1, client: client_r1, port: server_port_r1 };
