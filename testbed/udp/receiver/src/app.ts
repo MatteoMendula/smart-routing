@@ -25,15 +25,16 @@ const createReport = () => {
   const min = today.getMinutes();
   const s = today.getSeconds();
   const file_name = `${hh}_${min}_${s}_${dd}_${mm}_${yyyy}.csv`;
-  fs.appendFileSync(file_name, `index,seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency`);
+  fs.appendFileSync(file_name, `index,seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency,l_1,l_2`);
 
   for (var i in received_pkts_buffer){
     const row = received_pkts_buffer[i];
-    // console.log(row);
-
     const latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"])
+    // console.log(row);
+    const l_1 = (row["high_security"]) ? "" : latency;
+    const l_2 = (!row["high_security"]) ? "" : latency;
     fs.appendFile(file_name, 
-      `\n${i},${row["seq_number"]},${row["content_encripted"]},${row["high_security"]},${row["n_forwards"]},${row["destination"]},${row["timestamp_sent"]},${row["timestamp_received"]},${latency}`
+      `\n${i},${row["seq_number"]},${row["content_encripted"]},${row["high_security"]},${row["n_forwards"]},${row["destination"]},${row["timestamp_sent"]},${row["timestamp_received"]},${latency},${l_1},${l_2}`
       , function (err) {
         if (err) throw err;
         console.log(`row${i} ok`);

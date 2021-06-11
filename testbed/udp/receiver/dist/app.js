@@ -16,11 +16,13 @@ var createReport = function () {
     var min = today.getMinutes();
     var s = today.getSeconds();
     var file_name = hh + "_" + min + "_" + s + "_" + dd + "_" + mm + "_" + yyyy + ".csv";
-    fs.appendFileSync(file_name, "index,seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency");
+    fs.appendFileSync(file_name, "index,seq_number,content_encripted,high_security,n_forwards,destination,timestamp_sent,timestamp_received,latency,l_1,l_2");
     for (var i in received_pkts_buffer) {
         var row = received_pkts_buffer[i];
         var latency = Number(row["timestamp_received"]) - Number(row["timestamp_sent"]);
-        fs.appendFile(file_name, "\n" + i + "," + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency, function (err) {
+        var l_1 = (row["high_security"]) ? "" : latency;
+        var l_2 = (!row["high_security"]) ? "" : latency;
+        fs.appendFile(file_name, "\n" + i + "," + row["seq_number"] + "," + row["content_encripted"] + "," + row["high_security"] + "," + row["n_forwards"] + "," + row["destination"] + "," + row["timestamp_sent"] + "," + row["timestamp_received"] + "," + latency + "," + l_1 + "," + l_2, function (err) {
             if (err)
                 throw err;
             console.log("row" + i + " ok");
