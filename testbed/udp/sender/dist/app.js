@@ -35,10 +35,10 @@ var test = function (packet_limit) {
         destination["client"].send(Buffer.from(pkt_as_string), 0, pkt_as_string.length, destination["port"], destination["ip"], function (err) {
         });
         Sleep.usleep(1000 * 100);
-        Sleep.sleep(1);
-        client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
-        });
     }
+    Sleep.sleep(1);
+    client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, function (err) {
+    });
 };
 var client_r1 = dgram.createSocket('udp4');
 var client_r2 = dgram.createSocket('udp4');
