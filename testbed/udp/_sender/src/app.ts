@@ -66,8 +66,8 @@ const test = (packet_limit) => {
   const second_send_pkts = Math.ceil(packet_limit / 3 * 2);
   const third_send_pkts = packet_limit;
 
-  const first_send_time_pkt_per_sec = 100;
-  const second_send_time_pkt_per_sec = 800;
+  const first_send_time_pkt_per_sec = 400;
+  const second_send_time_pkt_per_sec = 900;
   const third_send_time_pkt_per_sec = 1000;
 
   let current_pkt_frequency = first_send_time_pkt_per_sec;
