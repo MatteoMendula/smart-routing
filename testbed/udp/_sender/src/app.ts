@@ -67,17 +67,17 @@ const test = (packet_limit) => {
   const third_send_pkts = packet_limit;
 
   const first_send_time_pkt_per_sec = 100;
-  const second_send_time_pkt_per_sec = 450;
+  const second_send_time_pkt_per_sec = 600;
   const third_send_time_pkt_per_sec = 1000;
 
   let current_pkt_frequency = first_send_time_pkt_per_sec;
 
   const sendPacktsFunction = ()=> {
-    console.log(counter)
     let high_security : boolean = (getRandomInt(3) === 0) ? true : false; //0,1,2
-    if (counter > second_send_pkts && counter < third_send_pkts){
+    if (counter > first_send_pkts){
       high_security = (getRandomInt(10) === 0) ? true : false;
     }
+    console.log(counter, high_security)
     const destination : object = (high_security) ? {ip: server_ip_r2, client: client_r2, port: server_port_r2} : {ip: server_ip_r1, client: client_r1, port: server_port_r1}; 
     const pkt = generate_pkt(counter, destination["ip"], high_security, current_pkt_frequency);
     const pkt_as_string = JSON.stringify(pkt);

@@ -34,12 +34,15 @@ var test = function (packet_limit) {
     var second_send_pkts = Math.ceil(packet_limit / 3 * 2);
     var third_send_pkts = packet_limit;
     var first_send_time_pkt_per_sec = 100;
-    var second_send_time_pkt_per_sec = 450;
+    var second_send_time_pkt_per_sec = 600;
     var third_send_time_pkt_per_sec = 1000;
     var current_pkt_frequency = first_send_time_pkt_per_sec;
     var sendPacktsFunction = function () {
-        console.log(counter);
         var high_security = (getRandomInt(3) === 0) ? true : false;
+        if (counter > first_send_pkts) {
+            high_security = (getRandomInt(10) === 0) ? true : false;
+        }
+        console.log(counter, high_security);
         var destination = (high_security) ? { ip: server_ip_r2, client: client_r2, port: server_port_r2 } : { ip: server_ip_r1, client: client_r1, port: server_port_r1 };
         var pkt = generate_pkt(counter, destination["ip"], high_security, current_pkt_frequency);
         var pkt_as_string = JSON.stringify(pkt);
