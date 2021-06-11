@@ -44,14 +44,13 @@ const test = (packet_limit) => {
     });
     Sleep.usleep(1000 * 100); //microseconds = 10e-3 milliseconds
     // Sleep.msleep(10); 
-
-    // sendPackets();
-    Sleep.sleep(1);
-    client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
-      // console.log(err)
-      // client.close();
-    });
   }
+  // sendPackets();
+  Sleep.sleep(1);
+  client_r1.send(Buffer.from("_END_OF_DIALOG_"), 0, "_END_OF_DIALOG_".length, server_port_r1, server_ip_r1, (err) => {
+    // console.log(err)
+    // client.close();
+  });
 }
 
 const client_r1 = dgram.createSocket('udp4');

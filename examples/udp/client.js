@@ -10,7 +10,7 @@ const interval = setInterval(()=>{
     console.log(counter)
     const message = Buffer.from('Some bytes'+counter);
 
-    client.send(message, 0, message.length, 41234, 'localhost', (err) => {
+    client.send(message, 0, message.length, 41234, '192.168.1.111', (err) => {
         // console.log(err)
         // client.close();
     });
