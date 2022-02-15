@@ -10,7 +10,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const executeCommand = (command) => {
+const executeCommand = (command, res) => {
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -21,20 +21,20 @@ const executeCommand = (command) => {
             return;
         }
         console.log(`stdout: ${stdout}`);
+        res.json({time_ms: time_taken_by_command});
     });
 }
 
-const measureCommandTime = (command) => {
+const measureCommandTime = (command, res) => {
     const startTime = performance.now()
-    executeCommand(command);
+    executeCommand(command, res);
     const endTime = performance.now();
     return endTime - startTime;
 }
 
 app.post('/executeCommand', (req, res) => {
     const command = req.body.command;
-    const time_taken_by_command = measureCommandTime(command);
-    res.json({time_ms: time_taken_by_command});
+    const time_taken_by_command = measureCommandTime(command, res);
 });
 
 app.listen(port, () => {
