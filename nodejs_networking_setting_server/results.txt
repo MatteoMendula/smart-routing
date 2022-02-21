@@ -1,0 +1,27 @@
+curl -X POST http://192.168.1.111:3000/executeNetworkingRule -H 'Content-Type: application/json' -d '{"id" : "6c99f816-ad84-4a39-8c73-e66faf0624fc","type" : "zone_creation_intent","sourceId" : "czm","metadata" : null,"zoneId" : "zone-a","zoneExtensionEdgeNodeList" : [ {"id" : "edge-node-n2","ipAddress" : "192.168.1.27","networkControllerPort" : 3000,"trafficRuleList" : [ {"sourceIpAddress" : "0.0.0.0/0","sourcePort" : 0,"destinationIpAddress" : "192.168.1.27","destinationPort" : 0,"protocol" : "*","rule" : "ALLOW","networkInterface" : "eth0","trafficType" : "OUTPUT"}, {"sourceIpAddress" : "192.168.1.27","sourcePort" : 0,"destinationIpAddress" : "0.0.0.0/0","destinationPort" : 0,"protocol" : "*","rule" : "ALLOW","networkInterface" : "eth0","trafficType" : "INPUT"} ]} ]}'
+
+{"time_ms":198.6829710006714}
+{"time_ms":207.27596800029278}
+{"time_ms":247.11602300032973}
+{"time_ms":220.1643950007856}
+{"time_ms":248.00565199926496}
+{"time_ms":204.1577739994973}
+{"time_ms":237.03028800152242}
+{"time_ms":240.2657800000161}
+{"time_ms":233.59917400032282}
+{"time_ms":214.51669299975038}
+
+-------------------------------
+
+curl -X POST http://192.168.1.111:3000/executeNetworkingRule -H 'Content-Type: application/json' -d '{"id" : "6c99f816-ad84-4a39-8c73-e66faf0624fc","type" : "zone_creation_intent","sourceId" : "czm","metadata" : null,"zoneId" : "zone-a","deploymentInfo" : [ {"id" : "edge-node-n2","ipAddress" : "192.168.1.27","networkControllerPort" : 3000,"trafficRuleList" : [ {"sourceIpAddress" : "0.0.0.0/0","sourcePort" : 0,"destinationIpAddress" : "192.168.1.27","destinationPort" : 0,"protocol" : "*","rule" : "ALLOW","networkInterface" : "eth0","trafficType" : "OUTPUT"} ]} ]}'
+
+{"time_ms":154.89001500047743}
+{"time_ms":180.50971799902618}
+{"time_ms":181.67819700017571}
+{"time_ms":186.50799500010908}
+{"time_ms":187.53887300007045}
+{"time_ms":142.9908649995923}
+{"time_ms":240.2506599985063}
+{"time_ms":178.68969199992716}
+{"time_ms":198.41356799937785}
+{"time_ms":217.95150600001216}
