@@ -30,6 +30,7 @@ const executeCommand = function (command, fn) {
 const measureCommandTime = (command, res) => {
     const startTime = performance.now();
     executeCommand(command, (endTime)=>{
+        console.log("sending res")
         res.json({time_ms: endTime - startTime});
     });
 }
