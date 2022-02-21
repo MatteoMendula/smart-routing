@@ -51,9 +51,9 @@ app.post('/executeNetworkingRule', (req, res) => {
             command += `sudo iptables -A ${rule.trafficType} -s ${(rule.trafficType == "OUTPUT") ? rule.destinationIpAddress : rule.sourceIpAddress} -j ACCEPT`;
         }
         // drop other IPs (INPUT AND OUTPUT)
-        command += (command.length == 0) ? "" : " && iptables -P INPUT DROP && iptables -P OUTPUT DROP"; 
+        command += (command.length == 0) ? "" : " && sudo iptables -P INPUT DROP && sudo iptables -P OUTPUT DROP"; 
         console.log(command)
-        // measureCommandTime(command, res);
+        measureCommandTime(command, res);
     }
 });
 
