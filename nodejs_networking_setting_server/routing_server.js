@@ -41,7 +41,8 @@ app.post('/executePlainCommand', (req, res) => {
 
 
 app.post('/executeNetworkingRule', (req, res) => {
-    console.log(JSON.stringify(req))
+    console.log(JSON.stringify(req.ip || req.ips))
+    return
     const network_rule = req?.body?.zoneExtensionEdgeNodeList?.[0];
     if (network_rule?.trafficRuleList) {
         // sudo iptables -A INPUT -s 192.168.1.1 -j ACCEPT
