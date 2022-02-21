@@ -47,11 +47,13 @@ app.post('/executeNetworkingRule', (req, res) => {
         let command = "";
         for (var i in network_rule.trafficRuleList){
             const rule = network_rule.trafficRuleList[i];
-            command += (i==0) ? "" : " && " + `sudo iptables -A ${rule.trafficType} -s ${rule.destinationIpAddress} -j ACCEPT`;
+            command += (i==0) ? "" : " && ";
+            command += `sudo iptables -A ${rule.trafficType} -s ${(rule.trafficType == "OUTPUT") ? rule.destinationIpAddress : rule.sourceIpAddress} -j ACCEPT`;
         }
         // drop other IPs (INPUT AND OUTPUT)
         command += (command.length == 0) ? "" : " && iptables -P INPUT DROP && iptables -P OUTPUT DROP"; 
-        measureCommandTime(command, res);
+        console.log(command)
+        // measureCommandTime(command, res);
     }
 });
 
