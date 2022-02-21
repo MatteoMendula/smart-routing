@@ -1,0 +1,31 @@
+--------------- CONDUIT conduit-ab CREATION INTENT - FIRST SIDE (edge-node-n1) ---------------
+{
+  "id" : "eddc0437-2959-4d99-b206-253e10d9919f",
+  "type" : "conduit_side_creation_intent",
+  "sourceId" : "czm",
+  "metadata" : null,
+  "deploymentInfo" : {
+    "nodeId" : "edge-node-n1",
+    "nodeIpAddress" : "192.168.0.111",
+    "networkControllerPort" : 3000,
+    "trafficRuleList" : [ {
+      "sourceIpAddress" : "0.0.0.0/0",
+      "sourcePort" : 0,
+      "destinationIpAddress" : "192.168.0.112",
+      "destinationPort" : 1883,
+      "protocol" : "tcp",
+      "rule" : "ALLOW",
+      "networkInterface" : "eth0",
+      "trafficType" : "OUTPUT"
+    } ]
+  },
+  "conduitAttributes" : [ {
+    "key" : "qos_level",
+    "value" : "high",
+    "mandatory" : true
+  }, {
+    "key" : "security_level",
+    "value" : "DES",
+    "mandatory" : true
+  } ]
+}

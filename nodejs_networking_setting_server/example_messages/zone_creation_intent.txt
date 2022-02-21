@@ -1,0 +1,33 @@
+--------------- ZONE zone-a CREATION INTENT (Node: edge-node-n1 - NDT: controller-ndt-n1) ---------------
+
+{
+  "id" : "6c99f816-ad84-4a39-8c73-e66faf0624fc",
+  "type" : "zone_creation_intent",
+  "sourceId" : "czm",
+  "metadata" : null,
+  "zoneId" : "zone-a",
+  "zoneExtensionEdgeNodeList" : [ {
+    "id" : "edge-node-n2",
+    "ipAddress" : "192.168.0.208",
+    "networkControllerPort" : 3000,
+    "trafficRuleList" : [ {
+      "sourceIpAddress" : "0.0.0.0/0",
+      "sourcePort" : 0,
+      "destinationIpAddress" : "192.168.0.209",
+      "destinationPort" : 0,
+      "protocol" : "*",
+      "rule" : "ALLOW",
+      "networkInterface" : "eth0",
+      "trafficType" : "OUTPUT"
+    }, {
+      "sourceIpAddress" : "192.168.0.209",
+      "sourcePort" : 0,
+      "destinationIpAddress" : "0.0.0.0/0",
+      "destinationPort" : 0,
+      "protocol" : "*",
+      "rule" : "ALLOW",
+      "networkInterface" : "eth0",
+      "trafficType" : "INPUT"
+    } ]
+  } ]
+}
