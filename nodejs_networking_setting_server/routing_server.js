@@ -41,8 +41,6 @@ app.post('/executePlainCommand', (req, res) => {
 
 
 app.post('/executeNetworkingRule', (req, res) => {
-    console.log(JSON.stringify(req.ip || req.ips))
-    return
     const network_rule = req?.body?.zoneExtensionEdgeNodeList?.[0];
     if (network_rule?.trafficRuleList) {
         // sudo iptables -A INPUT -s 192.168.1.1 -j ACCEPT
@@ -50,7 +48,7 @@ app.post('/executeNetworkingRule', (req, res) => {
         for (var i in network_rule.trafficRuleList){
             const rule = network_rule.trafficRuleList[i];
             command += (i==0) ? "" : " && ";
-            command += `sudo iptables -A ${rule.trafficType} -s ${(rule.trafficType == "OUTPUT") ? rule.destinationIpAddress : rule.sourceIpAddress} -j ACCEPT`;
+            command += `sudo iptables -A ${rule.trafficType} ${(rule.trafficType == "OUTPUT") ? "-d " + rule.destinationIpAddress : "-s " + rule.sourceIpAddress} -j ACCEPT`;
         }
         // drop other IPs (INPUT AND OUTPUT)
         command += (command.length == 0) ? "" : " && sudo iptables -P INPUT DROP && sudo iptables -P OUTPUT DROP"; 
